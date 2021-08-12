@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: ms-gateway
+server:
+  port: 8090
+zuul:
+  routes:
+    security:
+      sensitive-headers: Cookie,Set-Cookie
+    deposit:
+      service-id: ms-account
+      path: /api/account/**
+    account:
+      service-id: ms-deposit
+      path: /api/deposit/**
+    historical:
+      service-id: ms-historical
+      path: /api/historical/**
+    withdrawal:
+      service-id: ms-withdrawal
+      path: /api/withdrawal/**
