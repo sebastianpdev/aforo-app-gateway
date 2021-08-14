@@ -29,10 +29,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
 		http.authorizeRequests().antMatchers("/api/security/oauth/**").permitAll()
-		.antMatchers(HttpMethod.GET,"/api/account/listar","/api/account/ver/{id}","/api/historical/listar",
-				"/api/historical/transaction/{accountId}").hasAnyRole("ADMIN","USER")
-		.antMatchers("/api/deposit/**").hasAnyRole("ADMIN","USER")
-		.antMatchers("/api/withdrawal/**").hasAnyRole("ADMIN","USER")
+		.antMatchers("/services/payments/**").hasAnyRole("USER")
+		.antMatchers("/services/invoices/**").hasAnyRole("ADMIN","USER")
+		.antMatchers("/services/transactions/**").hasAnyRole("ADMIN","USER")
 		.anyRequest().authenticated().and().cors()
 		.configurationSource(configurationSource());
 	}
@@ -50,14 +49,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	}
 	
 	@Bean
-	public FilterRegistrationBean<CorsFilter> corsFilter (){
-		
-		FilterRegistrationBean <CorsFilter> bean = new FilterRegistrationBean <CorsFilter>(				
-				new CorsFilter (configurationSource())				
-				);		
-		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);		
-		return bean ; 
-	}	
+	public FilterRegistrationBean<CorsFilter> corsFilter () {
+
+		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(
+				new CorsFilter(configurationSource())
+		);
+		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return bean;
+	}
 	
 	@Bean
 	public JwtTokenStore tokenStore() {
@@ -69,6 +68,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		JwtAccessTokenConverter tokenConverter = new JwtAccessTokenConverter();
 		tokenConverter.setSigningKey("123456");
 		return tokenConverter ;
-	}	
+	}
 
 }

@@ -2,20 +2,33 @@ spring:
   application:
     name: ms-gateway
 server:
-  port: 8090
+  port: 8080
 zuul:
   routes:
     security:
-      sensitive-headers: Cookie,Set-Cookie
-    deposit:
-      service-id: ms-account
-      path: /api/account/**
-    account:
-      service-id: ms-deposit
-      path: /api/deposit/**
-    historical:
-      service-id: ms-historical
-      path: /api/historical/**
-    withdrawal:
-      service-id: ms-withdrawal
-      path: /api/withdrawal/**
+      sensitive-headers: Cookie,Set-Cookie,Authorization
+    payment:
+      serviceId: ms-pay
+      path: /services/payments/**
+      #url: http://localhost:8082
+    invoice:
+      serviceId: ms-invoice
+      path: /services/invoices/**
+      #url: http://localhost:8083
+    transaction:
+      serviceId: ms-transaction
+      path: /services/transactions/**
+      #url: http://localhost:8084
+ribbon:
+  eureka:
+    enabled: false
+
+ms-pay:
+  ribbon:
+    listOfServers: localhost:8082
+ms-invoice:
+  ribbon:
+    listOfServers: localhost:8083
+ms-transaction:
+  ribbon:
+    listOfServers: localhost:8084
